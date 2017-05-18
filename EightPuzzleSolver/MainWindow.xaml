@@ -32,5 +32,15 @@
         <Button x:Name="threezero" Content="6" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72" FontWeight="Bold" FontFamily="Courier New" Click="threezero_Click" Width="150" Height="150"/>
         <Button x:Name="threeone" Content="7" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72" FontWeight="Bold" FontFamily="Courier New" Click="threeone_Click" Width="150" Height="150"/>
         <Button x:Name="threetwo" Content="8" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="72" FontWeight="Bold" FontFamily="Courier New" Click="threetwo_Click" Width="150" Height="150"/>
+
+        <Button x:Name="randomize" Content="Randomize" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="27" FontWeight="Bold" FontFamily="MV Boli" Click="randomize_Click" Width="150" Height="50"/>
+
+        <TextBlock x:Name="algorithm" Grid.Row="2" Grid.Column="3" FontSize="27" HorizontalAlignment="Center" FontFamily="MV Boli" Margin="25,0">Algorithm</TextBlock>
+        <RadioButton x:Name="DFS" Content="DFS" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,42,20,92" IsChecked="True" Checked="Algorithm_Checked"/>
+        <RadioButton x:Name="BFS" Content="BFS" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,70,20,62" Checked="Algorithm_Checked"/>
+        <RadioButton x:Name="GBFS" Content="Greedy BFS" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,100,20,32" Checked="Algorithm_Checked"/>
+        <RadioButton x:Name="Astar" Content="A* Search" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,130,20,4" Checked="Algorithm_Checked"/>
+
+        <Button x:Name="solve" Content="Solve" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="27" FontWeight="Bold" FontFamily="MV Boli" Click="solve_Click" Width="150" Height="50"/>
     </Grid>
 </Window>
