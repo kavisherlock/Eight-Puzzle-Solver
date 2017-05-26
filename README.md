@@ -1,10 +1,25 @@
 # Eight-Puzzle-Solver
-First Visual Studio project from scratch
 
-This is a simple eight puzzle game created as a Windows Presentation Foundation application in Visual Studio
+### Introduction
+
+This is my first Visual Studio project from scratch
+
+This is the classic eight puzzle game created as a Windows Presentation Foundation application in Visual Studio
 
 The game gives the option to randomize the board and give the user a change to solve it
 
-Additionally, I implement an eight puzzle solver using DFS, BFS, Greedy Best-First Search, A* Search (using multiple heuristics)
+Additionally, I have implemented multiple algorithms to solve the current state of the board. The user can randomize the board (using the 'Randomize' button, or setting it themselves) and have the AI solve the board. The AI will instruct the user to take the steps to solve the board.
 
-The aim of this project is to learn creating applications in Windows C# while exploring the field of Artificial Intelligence.
+### Algorithms used
+
+#### Depth-First Search
+
+#### Breadth-First Search
+
+#### Greedy Best-First Search
+
+##### Heuristics Used
+- Number of misplaced tiles
+- Manhattan distance
+
+#### A* Search

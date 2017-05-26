@@ -21,8 +21,9 @@ namespace EightPuzzleSolver
     public partial class MainWindow : Window
     {
         private int[,] board = new int[,] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
-        enum algorithms { dfs, bfs, gbfs, astar};
-        algorithms algorithmUsed = algorithms.dfs;
+        private bool solvedClicked = false;
+        private List<string> stepsToTake = new List<string>();
+        private int stepIndex = 0;
 
         public MainWindow()
         {
@@ -82,6 +83,25 @@ namespace EightPuzzleSolver
             trySwapButtonContents(currentButton, getButton(rowNum, colNum - 1));
             trySwapButtonContents(currentButton, getButton(rowNum + 1, colNum));
             trySwapButtonContents(currentButton, getButton(rowNum, colNum + 1));
+
+            if (solvedClicked)
+            {
+                if (stepIndex < stepsToTake.Count)
+                {
+                    TextBlock nextStepBox = (TextBlock)this.FindName("nextStep");
+                    nextStepBox.Visibility = Visibility.Visible;
+                    nextStepBox.Text = stepsToTake[stepIndex++].ToUpper();
+                }
+                else
+                {
+                    solvedClicked = false;
+                    stepIndex = 0;
+                    ((TextBlock)this.FindName("solved")).Visibility = Visibility.Hidden;
+                    ((TextBlock)this.FindName("nSteps")).Visibility = Visibility.Hidden;
+                    ((TextBlock)this.FindName("nextStepText")).Visibility = Visibility.Hidden;
+                    ((TextBlock)this.FindName("nextStep")).Visibility = Visibility.Hidden;
+                }
+            }
         }
 
         private bool trySwapButtonContents(Button button1, Button button2)
@@ -167,27 +187,6 @@ namespace EightPuzzleSolver
             }
         }
 
-        private void Algorithm_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButton rb = (sender as RadioButton);
-            if (0 == String.Compare(rb.Name, "DFS"))
-            {
-                algorithmUsed = algorithms.dfs;
-            }
-            else if (0 == String.Compare(rb.Name, "BFS"))
-            {
-                algorithmUsed = algorithms.bfs;
-            }
-            else if(0 == String.Compare(rb.Name, "GBFS"))
-            {
-                algorithmUsed = algorithms.gbfs;
-            }
-            else
-            {
-                algorithmUsed = algorithms.astar;
-            }
-        }
-
         private void solve_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 1; i < 4; i++)
@@ -202,27 +201,60 @@ namespace EightPuzzleSolver
                 }
             }
 
-            boardSolver BoardSolver = new boardSolver(this.board);
-            int nSteps;
+            ComboBox selectedAlgorithm = (ComboBox)this.FindName("selectedAlgorithm");
 
-            switch (algorithmUsed)
+            boardSolver BoardSolver = new boardSolver(this.board);
+
+            if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "DFS"))
             {
-                case (algorithms.dfs):
-                    nSteps = BoardSolver.depthFirstSearch();
-                    break;
-                case (algorithms.bfs):
-                    nSteps = BoardSolver.breadthFirstSearch();
-                    break;
-                case (algorithms.gbfs):
-                    break;
-                case (algorithms.astar):
-                    break;
+                stepsToTake = BoardSolver.depthFirstSearch();
+            }
+            if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "BFS"))
+            {
+                stepsToTake = BoardSolver.breadthFirstSearch();
+            }
+            if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "GBFS"))
+            {
+                stepsToTake = BoardSolver.greedyBestFirstSearch();
+            }
+            if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "Astar"))
+            {
+                stepsToTake = BoardSolver.depthFirstSearch();
+            }
+
+            if (stepsToTake.Count > 0)
+            {
+                solvedClicked = true;
+                stepIndex = 0;
+                ((TextBlock)this.FindName("solved")).Visibility = Visibility.Visible;
+                ((TextBlock)this.FindName("nSteps")).Visibility = Visibility.Visible;
+                ((TextBlock)this.FindName("nSteps")).Text = stepsToTake.Count.ToString() + " Steps";
+                ((TextBlock)this.FindName("nextStepText")).Visibility = Visibility.Visible;
+                ((TextBlock)this.FindName("nextStep")).Visibility = Visibility.Visible;
+                ((TextBlock)this.FindName("nextStep")).Text = stepsToTake[stepIndex++].ToUpper();
             }
         }
 
-        private bool solved (int[,] currentBoard)
+        private void selectedAlgorithm_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            return false;
+            ComboBox myComboBox = (ComboBox)sender;
+            ComboBox heuristicComboBox = (ComboBox)this.FindName("selectedHeuristic");
+            TextBlock heuristicTextBlock = (TextBlock)this.FindName("Heuristic");
+
+            if (null == heuristicComboBox || null == heuristicTextBlock)
+                return;
+
+            if (0 == String.Compare(((ComboBoxItem)myComboBox.SelectedItem).Name, "GBFS")
+             || 0 == String.Compare(((ComboBoxItem)myComboBox.SelectedItem).Name, "Astar"))
+            {
+                heuristicComboBox.Visibility = Visibility.Visible;
+                heuristicTextBlock.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                heuristicComboBox.Visibility = Visibility.Hidden;
+                heuristicTextBlock.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

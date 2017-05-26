@@ -35,12 +35,25 @@
 
         <Button x:Name="randomize" Content="Randomize" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="27" FontWeight="Bold" FontFamily="MV Boli" Click="randomize_Click" Width="150" Height="50"/>
 
-        <TextBlock x:Name="algorithm" Grid.Row="2" Grid.Column="3" FontSize="27" HorizontalAlignment="Center" FontFamily="MV Boli" Margin="25,0">Algorithm</TextBlock>
-        <RadioButton x:Name="DFS" Content="DFS" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,42,20,92" IsChecked="True" Checked="Algorithm_Checked"/>
-        <RadioButton x:Name="BFS" Content="BFS" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,70,20,62" Checked="Algorithm_Checked"/>
-        <RadioButton x:Name="GBFS" Content="Greedy BFS" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,100,20,32" Checked="Algorithm_Checked"/>
-        <RadioButton x:Name="Astar" Content="A* Search" Grid.Row="2" Grid.Column="3" FontSize="18" FontFamily="MV Boli" Margin="25,130,20,4" Checked="Algorithm_Checked"/>
+        <TextBlock x:Name="algorithm" Grid.Row="1" Grid.Column="3" FontSize="27" HorizontalAlignment="Center" FontFamily="MV Boli" Margin="11.2,162.4,38.6,127" Grid.RowSpan="2">Algorithm</TextBlock>
+        <ComboBox Name="selectedAlgorithm" Grid.Row="2" Grid.Column="3" FontSize="13" FontFamily="MV Boli" Margin="11.2,41.2,11.6,95" SelectedIndex="0" SelectionChanged="selectedAlgorithm_SelectionChanged">
+            <ComboBoxItem Name="DFS">Depth First Search</ComboBoxItem>
+            <ComboBoxItem Name="BFS">Breadth First Search</ComboBoxItem>
+            <ComboBoxItem Name="GBFS">Greedy Best-First Search</ComboBoxItem>
+            <ComboBoxItem Name="Astar">A* Search</ComboBoxItem>
+        </ComboBox>
 
-        <Button x:Name="solve" Content="Solve" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="27" FontWeight="Bold" FontFamily="MV Boli" Click="solve_Click" Width="150" Height="50"/>
+        <TextBlock x:Name="Heuristic" Grid.Row="2" Grid.Column="3" FontSize="20" HorizontalAlignment="Center" FontFamily="MV Boli" Margin="12.2,73.2,78.6,53" Visibility="Hidden">Heuristic</TextBlock>
+        <ComboBox Name="selectedHeuristic" Grid.Row="2" Grid.Column="3" FontSize="13" FontFamily="MV Boli" Margin="12.2,110.2,10.6,26" SelectedIndex="0" Visibility="Hidden">
+            <ComboBoxItem Name="nMisplaced">Number of Misplaced Tiles</ComboBoxItem>
+            <ComboBoxItem Name="Manhattan">Manhattan Distance</ComboBoxItem>
+        </ComboBox>
+
+        <Button x:Name="solve" Content="Solve" Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="27" FontWeight="Bold" FontFamily="MV Boli" Click="solve_Click" Width="150" Height="50" Margin="11.2,10,11.6,102.4"/>
+
+        <TextBlock x:Name="solved" Grid.Row="3" Grid.Column="3" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" FontFamily="MV Boli" Margin="12,64,11.6,72.4" Width="150" Text="The Maze will take" Visibility="Hidden"/>
+        <TextBlock x:Name="nSteps" Grid.Row="3" Grid.Column="3" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" FontFamily="MV Boli" Margin="13,82,9.6,54.4" Width="151" Text="34556 Steps" Visibility="Hidden"/>
+        <TextBlock x:Name="nextStepText" Grid.Row="3" Grid.Column="3" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="MV Boli" Margin="10,107,69.6,29.4" Width="94" Text="Next Step: " Visibility="Hidden"/>
+        <TextBlock x:Name="nextStep" Grid.Row="3" Grid.Column="3" FontSize="20" TextAlignment="Center" VerticalAlignment="Center" FontFamily="Courier New"  FontWeight="Bold" Margin="88,109,-0.4,32.4" Text="LEFT" Visibility="Hidden" Height="21"/>
     </Grid>
 </Window>
