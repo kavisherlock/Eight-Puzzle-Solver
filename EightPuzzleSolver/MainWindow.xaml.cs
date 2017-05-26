@@ -219,7 +219,7 @@ namespace EightPuzzleSolver
             }
             if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "Astar"))
             {
-                stepsToTake = BoardSolver.depthFirstSearch();
+                stepsToTake = BoardSolver.aStarSearch();
             }
 
             if (stepsToTake.Count > 0)

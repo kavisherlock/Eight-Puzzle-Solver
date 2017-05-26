@@ -16,7 +16,8 @@ namespace EightPuzzleSolver
         private int[,] solvedBoard = new int[,] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } };
 
         HashSet<string> boardsSeen;
-        Dictionary<string, int> boardHeuristicTracker;
+        Dictionary<string, int> boardHeuristicTracker_GreedyBFS;
+        Dictionary<string, Tuple<int, int>> boardHeuristicTracker_AStar;
         Dictionary<string, string> parentMap;
 
         public boardSolver(int[,] board)
@@ -24,7 +25,8 @@ namespace EightPuzzleSolver
             this.currentBoard = board;
 
             boardsSeen = new HashSet<string>();
-            boardHeuristicTracker = new Dictionary<string, int>();
+            boardHeuristicTracker_GreedyBFS = new Dictionary<string, int>();
+            boardHeuristicTracker_AStar = new Dictionary<string, Tuple<int, int>>();
             parentMap = new Dictionary<string, string>();
 
             boardsSeen.Add(boardToString(board));
@@ -124,7 +126,7 @@ namespace EightPuzzleSolver
         public List<string> greedyBestFirstSearch()
         {
             int nSteps = 0;
-            boardHeuristicTracker[boardToString(currentBoard)] = -1;
+            boardHeuristicTracker_GreedyBFS[boardToString(currentBoard)] = -1;
             int[,] boardCheck = currentBoard;
             string boardCheckString = boardToString(boardCheck);
 
@@ -144,18 +146,83 @@ namespace EightPuzzleSolver
                         string neighborBoardString = boardToString(neighborBoard);
                         int neighborHeuristicValue = getHeuristicValue(neighborBoard);
 
-                        if (!boardHeuristicTracker.ContainsKey(neighborBoardString))
+                        if (!boardHeuristicTracker_GreedyBFS.ContainsKey(neighborBoardString))
                         {
                             parentMap[neighborBoardString] = boardCheckString;
-                            boardHeuristicTracker[neighborBoardString] = neighborHeuristicValue;
+                            boardHeuristicTracker_GreedyBFS[neighborBoardString] = neighborHeuristicValue;
                         }
                     }
                 }
 
                 nSteps++;
-                boardCheck = getCurrentBestBoard();
+                boardCheck = getCurrentBestBoard_GreedyBFS();
                 boardCheckString = boardToString(boardCheck);
             }
+
+            string originalBoard = boardToString(this.currentBoard);
+            string childBoard = boardToString(solvedBoard);
+            List<string> stepsToSolve = new List<string>();
+
+            while (childBoard != originalBoard)
+            {
+                stepsToSolve.Add(getBoardDifference(childBoard, parentMap[childBoard]));
+                childBoard = parentMap[childBoard];
+            }
+
+            stepsToSolve.Reverse();
+            return stepsToSolve;
+        }
+
+        public List<string> aStarSearch()
+        {
+            int nSteps = 0;
+            boardHeuristicTracker_AStar[boardToString(currentBoard)] = new Tuple<int, int>(0,-1);
+            int[,] boardCheck = currentBoard;
+            string boardCheckString = boardToString(boardCheck);
+
+            if (isSolved(boardCheck))
+            {
+                return new List<string>();
+            }
+
+            while (!isSolved(boardCheck))
+            {
+                foreach (neighbors neighbor in Enum.GetValues(typeof(neighbors)))
+                {
+                    int[,] neighborBoard = getNeighbor(boardCheck, neighbor);
+
+                    if (neighborBoard != null)
+                    {
+                        string neighborBoardString = boardToString(neighborBoard);
+                        int neighborHeuristicValue = getHeuristicValue(neighborBoard);
+                        int parentCost = boardHeuristicTracker_AStar[boardCheckString].Item1;
+
+                        if (!boardHeuristicTracker_AStar.ContainsKey(neighborBoardString))
+                        {
+                            parentMap[neighborBoardString] = boardCheckString;
+                            boardHeuristicTracker_AStar[neighborBoardString] = new Tuple<int, int>(parentCost + 1, neighborHeuristicValue);
+                        }
+                        else
+                        {
+                            if (boardHeuristicTracker_AStar[neighborBoardString].Item1 > parentCost + 1)
+                            {
+                                parentMap[neighborBoardString] = boardCheckString;
+                                boardHeuristicTracker_AStar[neighborBoardString] = new Tuple<int, int>(parentCost + 1, neighborHeuristicValue);
+                            }
+                        }
+                        if (isSolved(neighborBoard))
+                        {
+                            nSteps++;
+                            goto solved;
+                        }
+                    }
+                }
+                nSteps++;
+                boardCheck = getCurrentBestBoard_AStar();
+                boardCheckString = boardToString(boardCheck);
+            }
+
+            solved:
 
             string originalBoard = boardToString(this.currentBoard);
             string childBoard = boardToString(solvedBoard);
@@ -297,13 +364,13 @@ namespace EightPuzzleSolver
             return -1;
         }
 
-        private int[,] getCurrentBestBoard()
+        private int[,] getCurrentBestBoard_GreedyBFS()
         {
             int currentMin = -1;
             string currentMinBoardString = "00000000";
             int[,] currentMinBoard = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
 
-            foreach (KeyValuePair<string, int> board in boardHeuristicTracker)
+            foreach (KeyValuePair<string, int> board in boardHeuristicTracker_GreedyBFS)
             {
                 if ((currentMin == -1 || board.Value < currentMin) && board.Value != -1)
                 {
@@ -312,13 +379,41 @@ namespace EightPuzzleSolver
                 }
             }
 
-            boardHeuristicTracker[currentMinBoardString] = -1;
+            boardHeuristicTracker_GreedyBFS[currentMinBoardString] = -1;
 
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
                     currentMinBoard[i, j] = currentMinBoardString[j + 3*i] - 48;
+                }
+            }
+
+            return currentMinBoard;
+        }
+
+        private int[,] getCurrentBestBoard_AStar()
+        {
+            int currentMin = -1;
+            string currentMinBoardString = "00000000";
+            int[,] currentMinBoard = { { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 } };
+
+            foreach (KeyValuePair<string, Tuple<int,int>> board in boardHeuristicTracker_AStar)
+            {
+                if ((currentMin == -1 || (board.Value.Item1 + board.Value.Item2) < currentMin) && board.Value.Item2 != -1)
+                {
+                    currentMin = (board.Value.Item1 + board.Value.Item2);
+                    currentMinBoardString = board.Key;
+                }
+            }
+
+            boardHeuristicTracker_AStar[currentMinBoardString] = new Tuple<int, int>(boardHeuristicTracker_AStar[currentMinBoardString].Item1, -1);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    currentMinBoard[i, j] = currentMinBoardString[j + 3 * i] - 48;
                 }
             }
 
