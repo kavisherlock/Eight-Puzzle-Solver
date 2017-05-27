@@ -202,24 +202,29 @@ namespace EightPuzzleSolver
             }
 
             ComboBox selectedAlgorithm = (ComboBox)this.FindName("selectedAlgorithm");
+            ComboBox selectedHeuristic = (ComboBox)this.FindName("selectedHeuristic");
+            BoardSolver.heuristic heuristicToUse;
 
-            boardSolver BoardSolver = new boardSolver(this.board);
+            if (selectedHeuristic.SelectedIndex == 0)
+                heuristicToUse = BoardSolver.heuristic.nMisplaced; 
+            else
+                heuristicToUse = BoardSolver.heuristic.manhattan;
 
             if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "DFS"))
             {
-                stepsToTake = BoardSolver.depthFirstSearch();
+                stepsToTake = new BoardSolver(this.board).depthFirstSearch();
             }
             if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "BFS"))
             {
-                stepsToTake = BoardSolver.breadthFirstSearch();
+                stepsToTake = new BoardSolver(this.board).breadthFirstSearch();
             }
             if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "GBFS"))
             {
-                stepsToTake = BoardSolver.greedyBestFirstSearch();
+                stepsToTake = new BoardSolver(this.board, heuristicToUse).greedyBestFirstSearch();
             }
             if (0 == String.Compare(((ComboBoxItem)selectedAlgorithm.SelectedItem).Name, "Astar"))
             {
-                stepsToTake = BoardSolver.aStarSearch();
+                stepsToTake = new BoardSolver(this.board, heuristicToUse).aStarSearch();
             }
 
             if (stepsToTake.Count > 0)
@@ -237,15 +242,14 @@ namespace EightPuzzleSolver
 
         private void selectedAlgorithm_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox myComboBox = (ComboBox)sender;
+            ComboBox senderBox = (ComboBox)sender;
             ComboBox heuristicComboBox = (ComboBox)this.FindName("selectedHeuristic");
             TextBlock heuristicTextBlock = (TextBlock)this.FindName("Heuristic");
 
             if (null == heuristicComboBox || null == heuristicTextBlock)
                 return;
 
-            if (0 == String.Compare(((ComboBoxItem)myComboBox.SelectedItem).Name, "GBFS")
-             || 0 == String.Compare(((ComboBoxItem)myComboBox.SelectedItem).Name, "Astar"))
+            if (senderBox.SelectedIndex == 2 || senderBox.SelectedIndex == 3)
             {
                 heuristicComboBox.Visibility = Visibility.Visible;
                 heuristicTextBlock.Visibility = Visibility.Visible;
