@@ -1,5 +1,0 @@
-c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\EightPuzzleSolver\MainWindow.xaml.cs;c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\.klocwork\EightPuzzleSolver\cs.kwlp\ds\1\jnggauux.4ol;1;0;False;8B4C9FD35ABC856C9C710531BA1640656889C541;False
-c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\EightPuzzleSolver\App.xaml.cs;;2;0;False;7765BEF929B4EC64FD27968E24ADB882AF99B102;False
-c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\EightPuzzleSolver\Properties\AssemblyInfo.cs;;3;0;False;72D14FE8281293D02AE5E2447301837CE52A16C3;False
-c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\EightPuzzleSolver\Properties\Resources.Designer.cs;;4;0;False;3D127043C9BAFCE61FAF39A24BD20A224B5F2ABD;False
-c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\EightPuzzleSolver\Properties\Settings.Designer.cs;;5;0;False;C4E8942B13049CC0DC520AD1CFEC9E3673FCC6B4;False

@@ -1,1 +1,0 @@
-c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\EightPuzzleSolver\MainWindow.xaml;c:\users\km047841\documents\visual studio 2015\Projects\EightPuzzleSolver\.klocwork\EightPuzzleSolver\cpp.kwlp\ds\1\rs5o3jul.czs;1;0;False;39CE62113E4E806ECC0220A3E7BE0EA86F1ADCAA;False
